@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import todoRoutes from "./routes/todo";
+
 dotenv.config();
 const app: Application = express();
 const PORT = process.env.PORT || 4000;
@@ -33,3 +34,9 @@ mongoose
         console.error("MongoDB connection error:", err);
         process.exit(1);
     });
+    app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
