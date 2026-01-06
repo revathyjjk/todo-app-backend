@@ -1,22 +1,25 @@
-import express, { type Application, type Request, type Response } from "express";
-import mongoose from "mongoose";
+
+import express from "express";
 import cors from "cors";
+import mongoose from "mongoose";
 import dotenv from "dotenv";
-import todoRoutes from "./routes/todo";
+import authRoutes from "./routes/auth.routes";
+import notesRoutes from "./routes/notes.routes";
 
 dotenv.config();
-const app: Application = express();
+
+const app = express();
+
+/* middleware */
+app.use(cors({ origin: "http://localhost:3000" }));
+app.use(express.json());
+
 const PORT = process.env.PORT || 4000;
 const MONGODB_URI = process.env.MONGODB_URI || "";
-// Middleware
-app.use(cors());
-app.use(express.json());
-// Routes
-app.use("/api/todos", todoRoutes);
-// Health check
-app.get("/", (req: Request, res: Response) => {
-    res.json({ status: "OK", message: "Todo API running" });
-});
+
+// mount routes BEFORE starting the server
+app.use("/api/auth", authRoutes);
+app.use("/api/notes", notesRoutes);
 // Connect to Mongo and start server
 if (!MONGODB_URI) {
     console.error("MONGODB_URI is not set in .env");
@@ -34,9 +37,3 @@ mongoose
         console.error("MongoDB connection error:", err);
         process.exit(1);
     });
-    app.use(
-  cors({
-    origin: "http://localhost:3000",
-    credentials: true,
-  })
-);
