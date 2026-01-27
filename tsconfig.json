@@ -5,6 +5,7 @@
     "rootDir": "src",
     "outDir": "dist",
     "esModuleInterop": true,
+     "types": ["jest", "node"],
     "strict": true
   }
 }
